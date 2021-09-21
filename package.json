@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "golive": "lt --port 5500"
+  },
+  "dependencies": {
+    "localtunnel": "^2.0.2"
+  }
+}
