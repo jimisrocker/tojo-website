@@ -1,7 +1,7 @@
 from flask import render_template,request,flash
 from flask import Blueprint
 from .models import Business,Message
-
+from .email_handler import reply_to_sender,notify_people
 
 views=Blueprint('views',__name__)
 
@@ -27,11 +27,17 @@ def index():
         else:
             if request.form.get('cf-phone'):
                 new_business= Business(name=name, email=email,phone=phone,message=message).save()
+                reply_to_sender(email)
+                notify_people(name=name,dudes_email=email,phone=phone,message=message)
                 flash('Business registered, we will contact you soon!', category='success')
                 print('Business registered')
             else:
                 flash('Message sent, we will contact you soon!', category='success')
+                reply_to_sender(email)
+                notify_people(name=name,dudes_email=email,phone='none',message=message)
                 new_message= Message(name=name, email=email,message=message).save()
+                
                 print('Message sent')
+            
 
     return render_template("index.html")
